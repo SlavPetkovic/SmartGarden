@@ -8,6 +8,7 @@ import adafruit_veml7700
 import datetime
 import RPi.GPIO as GPIO
 import atexit
+from adafruit_seesaw.seesaw import Seesaw
 
 # GPIO setup
 rc1 = 23
@@ -33,11 +34,12 @@ i2c = board.I2C()
 veml7700 = adafruit_veml7700.VEML7700(i2c)
 bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
 bme680.sea_level_pressure = 1013.25
+ss = Seesaw(i2c, addr=0x36)
 
 dbname = 'data/Neutrino.db'
 
 
-def store_data(timestamp, temperature, gas, humidity, pressure, altitude, luminosity):
+def store_data(timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_temperature ):
     conn = None
     try:
         # Connect to the SQLite database
@@ -46,9 +48,9 @@ def store_data(timestamp, temperature, gas, humidity, pressure, altitude, lumino
 
         # Insert a row of data
         curs.execute('''INSERT INTO SensorsData 
-                     (timestamp, temperature, gas, humidity, pressure, altitude, luminosity) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                     (timestamp, temperature, gas, humidity, pressure, altitude, luminosity))
+                     (timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_temperature) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                     (timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_temperature))
 
         # Commit the changes and close the connection
         conn.commit()
@@ -67,7 +69,9 @@ def read_sensors():
     pressure = round(bme680.pressure, 2)
     altitude = round(bme680.altitude, 2)
     luminosity = round(veml7700.light, 2)
-    return timestamp, temperature, gas, humidity, pressure, altitude, luminosity
+    soil_moisture = round(ss.moisture_read(), 2)
+    soil_temperature = round(ss.get_temp(), 2)
+    return timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_moisture,soil_temperature
 
 
 def control_led(luminosity):
@@ -85,7 +89,7 @@ def main_loop():
             data = read_sensors()
             control_led(data[-1])  # Luminosity is the last item in the tuple returned by read_sensors
             store_data(*data)
-            print(f"{data[0]}, {data[1]}, {data[2]}, {data[3]}, {data[4]}, {data[5]}, {data[6]}")
+            print(f"{data[0]}, {data[1]}, {data[2]}, {data[3]}, {data[4]}, {data[5]}, {data[6]}, {data[7]}, {data[8]}, {data[9]}, {data[10]}")
             time.sleep(1)
         except Exception as e:
             print(f"Error: {e}")
