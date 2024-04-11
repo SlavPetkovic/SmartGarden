@@ -34,7 +34,7 @@ veml7700 = adafruit_veml7700.VEML7700(i2c)
 bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
 bme680.sea_level_pressure = 1013.25
 
-dbname = 'Neutrino.db'
+dbname = 'data/Neutrino.db'
 
 
 def store_data(timestamp, temperature, gas, humidity, pressure, altitude, luminosity):
