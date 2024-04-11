@@ -17,6 +17,8 @@ class Sensors(Base):
     Pressure = Column(Numeric)
     Altitude = Column(Numeric)
     Luminosity = Column(Numeric)
+    soil_moisture = Column(Numeric)
+    soil_temperature = Column(Numeric)
 
 # Create engine
 engine = create_engine('sqlite:///data/Neutrino.db', echo=True)

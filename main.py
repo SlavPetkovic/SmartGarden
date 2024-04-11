@@ -76,26 +76,37 @@ def read_sensors():
 
 def control_led(luminosity):
     if luminosity >= 20:
-        print("Lights Off")
+        print("Lights Is Off")
         GPIO.output(rc1, False)
     else:
-        print("Lights On")
+        print("Lights Is On")
         GPIO.output(rc1, True)
 
+def control_pump(soil_moisture):
+    if soil_moisture <= 400:
+        print("Pump Is Off")
+        GPIO.output(rc2, False)
+    else:
+        print("Pump Is On")
+        GPIO.output(rc2, True)
 
 def main_loop():
     while True:
         try:
+            # Read data
             data = read_sensors()
-            control_led(data[-1])  # Luminosity is the last item in the tuple returned by read_sensors
+            # Control lights based on luminosity level
+            control_led(data[-3])
+            # Control water pump based on soil moisture level
+            control_pump(data[-2])
+            # Write data into database
             store_data(*data)
-            print(f"{data[0]}, {data[1]}, {data[2]}, {data[3]}, {data[4]}, {data[5]}, {data[6]}, {data[7]}, {data[8]}, {data[9]}, {data[10]}")
+            # Print data into console
+            print(f"{data[0]}, {data[1]}, {data[2]}, {data[3]}, {data[4]}, {data[5]}, {data[6]}, {data[7]}, {data[8]}")
             time.sleep(1)
         except Exception as e:
             print(f"Error: {e}")
-            # Handle or log error, then optionally continue or break
             break
-
 
 if __name__ == "__main__":
     main_loop()
