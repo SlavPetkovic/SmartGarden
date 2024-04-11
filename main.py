@@ -11,9 +11,12 @@ import atexit
 
 # GPIO setup
 rc1 = 23
+rc2 = 24
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(rc1, GPIO.OUT)
 GPIO.output(rc1, False)
+GPIO.setup(rc2, GPIO.OUT)
+GPIO.output(rc2, False)
 
 
 # Clean up GPIO pins when the script exits
