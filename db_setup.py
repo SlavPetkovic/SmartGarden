@@ -38,7 +38,9 @@ with Session() as session:
         Humidity=50,
         Pressure=1000,
         Altitude=1000,
-        Luminosity=1000
+        Luminosity=1000,
+        soil_moisture=400,
+        soil_temperature=25
     )
 
     # Add test_data to the session
