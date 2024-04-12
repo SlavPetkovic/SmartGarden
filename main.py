@@ -39,7 +39,7 @@ ss = Seesaw(i2c, addr=0x36)
 dbname = 'data/Neutrino.db'
 
 
-def store_data(timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_temperature ):
+def store_data(timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_temperature):
     conn = None
     try:
         # Connect to the SQLite database
@@ -71,7 +71,7 @@ def read_sensors():
     luminosity = round(veml7700.light, 2)
     soil_moisture = round(ss.moisture_read(), 2)
     soil_temperature = round(ss.get_temp(), 2)
-    return timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture, soil_moisture,soil_temperature
+    return timestamp, temperature, gas, humidity, pressure, altitude, luminosity, soil_moisture,soil_temperature
 
 
 def control_led(luminosity):
