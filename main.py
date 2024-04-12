@@ -11,8 +11,9 @@ import atexit
 from adafruit_seesaw.seesaw import Seesaw
 
 # GPIO setup
-rc1 = 23
-rc2 = 24
+
+rc1 = 24
+rc2 = 23
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(rc1, GPIO.OUT)
 GPIO.output(rc1, False)
@@ -75,7 +76,7 @@ def read_sensors():
 
 
 def control_led(luminosity):
-    if luminosity >= 20:
+    if luminosity >= 200:
         print("Lights Is Off")
         GPIO.output(rc1, False)
     else:
