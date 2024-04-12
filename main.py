@@ -76,20 +76,20 @@ def read_sensors():
 
 
 def control_led(luminosity):
-    if luminosity >= 200:
+    if luminosity >= 100:
         print("Lights Is Off")
-        GPIO.output(rc1, False)
+        GPIO.output(rc1, True)
     else:
         print("Lights Is On")
-        GPIO.output(rc1, True)
+        GPIO.output(rc1, False)
 
 def control_pump(soil_moisture):
     if soil_moisture <= 400:
         print("Pump Is Off")
-        GPIO.output(rc2, False)
+        GPIO.output(rc2, True)
     else:
         print("Pump Is On")
-        GPIO.output(rc2, True)
+        GPIO.output(rc2, False)
 
 def main_loop():
     while True:
